@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Removing Markers</title>
+    <style>
+      #map {
+        height: 100%;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #floating-panel {
+        position: absolute;
+        top: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="floating-panel">
+      <input onclick="clearMarkers();" type=button value="Hide Markers">
+      <input onclick="showMarkers();" type=button value="Show All Markers">
+      <input onclick="deleteMarkers();" type=button value="Delete Markers">
+    </div>
+    <div id="map"></div>
+    <p>Click on the map to add markers.</p>
+    <script>
+
+      var map;
+      var markers = [];
+
+      function initMap() {
+        var Brighton = {lat:50° 50′ 34.59″, lng:0° 7′ 52.72″ W};
+
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 12,
+          center: Brighton,
+          mapTypeId: 'terrain'
+        });
+
+        map.addListener('click', function(event) {
+          addMarker(event.latLng);
+        });
+
+        addMarker(Brighton);
+      }
+
+      function addMarker(location) {
+        var marker = new google.maps.Marker({
+          position: location,
+          map: map
+        });
+        markers.push(marker);
+      }
+
+      function setMapOnAll(map) {
+        for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(map);
+        }
+      }
+
+      function clearMarkers() {
+        setMapOnAll(null);
+      }
+
+      function showMarkers() {
+        setMapOnAll(map);
+      }
+
+      function deleteMarkers() {
+        clearMarkers();
+        markers = [];
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+    </script>
+  </body>
+</html>
